@@ -5,35 +5,30 @@ import { toast } from 'sonner';
 import { useDispatch } from "react-redux";
 import { AddToCart, RemoveToCart } from '../slice/slice';
 import { NavLink } from 'react-router';
+import { api, fetchData } from '../api/api';
 
 const ProductCards = () => {
 
- 
-
-const dispatch=useDispatch()
-
-      useEffect(()=>{
-        const data=fetch("http://localhost:8000/data").then((res)=>{
-  return res.json()
-}).then((data)=>{
-  // console.log("data",data);
-  setProducts(data)
-  
-}).catch((err)=>{
-  console.log("err",err);
-  
-})
-.finally(()=>{
-  // console.log("API is Called and resp is received");
-  
-})
-
-    },[])
   const [favorites, setFavorites] = useState(new Set());
   const [cart, setCart] = useState(new Set());
   const [products,setProducts] = useState([]);
   const [hoveredCard, setHoveredCard] = useState(null);
 
+
+const dispatch=useDispatch()
+
+      useEffect(()=>{
+const res=api.get("/data").then((res)=>{
+  console.log(res);
+  setProducts(res?.data)
+  return res
+}).catch((err)=>{
+  return err
+})
+console.log(res);
+
+
+    },[])
 
   const inCartItems =JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -193,11 +188,11 @@ dispatch(AddToCart(cart[0]))
                   hoveredCard === product.id ? 'opacity-100 translate-y-0' : 'opacity-100 md:opacity-0 -translate-y-2'
                 }`}>
                   <Eye size={14} className="text-white" />
-                  <NavLink to={`/shop/${product.id}/category/electronics`} className="text-xs font-semibold text-white cursor-pointer">Quick View</NavLink>
+                  <NavLink to={`/shop/${product.id}/category/${product.category}`} className="text-xs font-semibold text-white cursor-pointer">Quick View</NavLink>
                 </div>
 
                 {/* Category Badge */}
-                <div className="absolute bottom-4 left-4 px-3 py-1 rounded-full bg-purple-500/20 backdrop-blur-md border border-purple-400/30">
+                <div className="absolute bottom-4 left-4 px-3 rounded-full bg-purple-500/20 backdrop-blur-md border border-purple-400/30">
                   <span className="text-xs font-semibold text-purple-300">{product.category}</span>
                 </div>
               </div>
@@ -246,14 +241,14 @@ dispatch(AddToCart(cart[0]))
                       
                       
                       toggleCart(product.id,exists)}}
-                    className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+                    className={`cursor-pointer flex-1 py-3 px-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                       exists
                         ? 'bg-linear-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30'
                         : 'bg-linear-to-r from-cyan-500 to-purple-500 text-white hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105'
                     }`}
                   >
                     <ShoppingCart size={18} />
-                    <span className="text-sm">
+                    <span className="text-sm ">
                       {exists ? 'In Cart' : 'Add to Cart'}
                     </span>
                   </button>

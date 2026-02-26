@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Heart, ShoppingCart, User, Menu, X, ChevronDown, Package, LogOut, UserCircle, LogIn } from 'lucide-react';
+import { Search, Heart, ShoppingCart, User, Menu, X, ChevronDown, Package, LogOut, UserCircle, LogIn, Home } from 'lucide-react';
 import { toast } from 'sonner';
 import { NavLink } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -51,13 +51,13 @@ const cart=useSelector((state)=>state)
     { name: 'Shop', href: '/shop' },
 
     { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Admin', href: '/admin' },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-slate-900/5'
             : 'bg-white'
@@ -113,7 +113,7 @@ const cart=useSelector((state)=>state)
                   <div
                     onMouseEnter={() => setCategoriesOpen(true)}
                     onMouseLeave={() => setCategoriesOpen(false)}
-                    className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl shadow-slate-900/10 border border-slate-100 py-2 animate-fadeIn"
+                    className="absolute top-7 left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl shadow-slate-900/10 border border-slate-100 py-2 animate-fadeIn"
                   >
                     {categories.map((category, index) => (
                       <a
@@ -171,50 +171,74 @@ const cart=useSelector((state)=>state)
               </NavLink>
 
               {/* User Profile - Desktop */}
-              <div className="hidden sm:block relative">
+              <div className="hidden sm:block relative ">
                 <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="p-2.5 text-slate-700 hover:text-amber-600 hover:bg-amber-50 rounded-full transition-all duration-300 group"
+                  onClick={() => {
+                    console.log(userMenuOpen);
+                    
+                    setUserMenuOpen(!userMenuOpen)}}
+                  className="p-2.5 text-slate-700 cursor-pointer hover:text-amber-600 hover:bg-amber-50 rounded-full transition-all duration-300 group"
                   aria-expanded={userMenuOpen}
                   aria-label="User menu"
                 >
-                  <User className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+                 {/* <NavLink to={"/signup"}> */}
+                   <User className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+               
+                 {/* </NavLink> */}
+              
                 </button>
 
                 {/* User Dropdown Menu */}
                 {userMenuOpen && (
                   <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl shadow-slate-900/10 border border-slate-100 py-2 animate-fadeIn">
-                    <a
-                      href="#login"
+                    <NavLink
+                    to={"/login"}
+
+                    onClick={() => {
+                    console.log(userMenuOpen);
+                    
+                    setUserMenuOpen(!userMenuOpen)}}
                       className="flex items-center space-x-3 px-5 py-3 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-all duration-200"
                     >
                       <LogIn className="w-4 h-4" />
                       <span>Login</span>
-                    </a>
-                    <a
-                      href="#register"
+                    </NavLink>
+                    <NavLink
+                      to={"/signup"}
+                        onClick={() => {
+                    console.log(userMenuOpen);
+                    
+                    setUserMenuOpen(!userMenuOpen)}}
+
                       className="flex items-center space-x-3 px-5 py-3 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-all duration-200"
                     >
                       <UserCircle className="w-4 h-4" />
                       <span>Register</span>
-                    </a>
+                    </NavLink>
                     <div className="my-2 border-t border-slate-100"></div>
-                    <a
-                      href="#orders"
+                    <NavLink
+                     to={"/cart"}
+                  
+    onClick={() => {
+                    console.log(userMenuOpen);
+                    
+                    setUserMenuOpen(!userMenuOpen)}}
                       className="flex items-center space-x-3 px-5 py-3 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-all duration-200"
                     >
                       <Package className="w-4 h-4" />
                       <span>My Orders</span>
-                    </a>
-                    <a
-                      href="#logout"
+                    </NavLink>
+                    <NavLink
+                      to="/"
+                      // onClick={setUserMenuOpen(!userMenuOpen)}
+
                       className="flex items-center space-x-3 px-5 py-3 text-sm font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 transition-all duration-200"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Logout</span>
-                    </a>
+                    </NavLink>
                   </div>
-                )}
+ )} 
               </div>
 
               {/* Mobile Menu Button */}
@@ -289,13 +313,13 @@ const cart=useSelector((state)=>state)
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <a
-                    href="#login"
+                    href="/login"
                     className="px-4 py-2 text-xs font-bold text-slate-900 bg-white rounded-lg hover:bg-slate-200 transition-all duration-300 text-center"
                   >
                     Login
                   </a>
                   <a
-                    href="#register"
+                    href="/signup"
                     className="px-4 py-2 text-xs font-bold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-all duration-300 text-center"
                   >
                     Register

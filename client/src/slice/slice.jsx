@@ -7,6 +7,12 @@ const IncrementReducer=createSlice({
        AddToCart:(state,action)=>{
         console.log("reducer",state,action.payload,initialState);
         
+
+
+// initialState
+
+
+
        state.push(action.payload)
 localStorage.setItem("cart",JSON.stringify(state))
        },
