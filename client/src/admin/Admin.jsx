@@ -169,16 +169,17 @@ function UsersModal({ onClose }) {
 const [users,setUsers]=useState([])
 console.log("ok");
 
-useEffect(()=>{
-  fetchUsers().then((resp)=>{
-    console.log(resp,"response");
-setUsers(resp)
-
-}).catch((err)=>{
-    console.log(err);
-    
-  })
-},[])
+useEffect(() => {
+  fetchUsers()
+    .then((resp) => {
+      console.log(resp, "response");
+      setUsers(resp || []); // fallback to empty array
+    })
+    .catch((err) => {
+      console.log(err);
+      setUsers([]); // fallback if fetch fails
+    });
+}, []);
 
   const tierColors = ["#c9a84c", "#94a3b8", "#c4a882", "#94a3b8", "#c9a84c", "#94a3b8"];
   return (
