@@ -1,25 +1,21 @@
 import { LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteProduct, fetchProducts, fetchUsers, updateProduct } from "../api/api";
+
+
+
 
 /* ─── Seed Data ─── */
-const SEED_PRODUCTS = [
-  { id: 1, name: "Velvet Noir Tote", category: "Bags", price: 189, stock: 24, rating: 4.8, sales: 142, image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=120&h=120&fit=crop&crop=center" },
-  { id: 2, name: "Cashmere Drift Coat", category: "Outerwear", price: 540, stock: 8, rating: 4.9, sales: 67, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=120&h=120&fit=crop&crop=center" },
-  { id: 3, name: "Obsidian Heel Mule", category: "Footwear", price: 265, stock: 0, rating: 4.5, sales: 203, image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=120&h=120&fit=crop&crop=center" },
-  { id: 4, name: "Silk Reverie Blouse", category: "Tops", price: 148, stock: 31, rating: 4.7, sales: 318, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=120&h=120&fit=crop&crop=center" },
-  { id: 5, name: "Onyx Chain Bracelet", category: "Jewelry", price: 89, stock: 55, rating: 4.6, sales: 529, image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=120&h=120&fit=crop&crop=center" },
-  { id: 6, name: "Linen Mirage Trousers", category: "Bottoms", price: 210, stock: 3, rating: 4.4, sales: 91, image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=120&h=120&fit=crop&crop=center" },
-];
 
-const SEED_USERS = [
-  { id: 1, name: "Amara Osei", email: "amara@email.com", joined: "Jan 12, 2025", orders: 7, spent: 1840, avatar: "AO" },
-  { id: 2, name: "Luca Ferretti", email: "luca@email.com", joined: "Feb 3, 2025", orders: 2, spent: 430, avatar: "LF" },
-  { id: 3, name: "Priya Mehta", email: "priya@email.com", joined: "Nov 28, 2024", orders: 14, spent: 5620, avatar: "PM" },
-  { id: 4, name: "James Whitmore", email: "james@email.com", joined: "Mar 7, 2025", orders: 1, spent: 189, avatar: "JW" },
-  { id: 5, name: "Soo-Jin Park", email: "soojin@email.com", joined: "Dec 15, 2024", orders: 9, spent: 3110, avatar: "SP" },
-  { id: 6, name: "Keila Nkosi", email: "keila@email.com", joined: "Apr 2, 2025", orders: 4, spent: 760, avatar: "KN" },
-];
+
+
+
+  
+
+
+  
+
 
 const CATEGORIES = ["Bags", "Outerwear", "Footwear", "Tops", "Bottoms", "Jewelry", "Accessories"];
 
@@ -103,7 +99,7 @@ function EditModal({ product, onSave, onClose }) {
         </div>
         {/* Image preview */}
         <div className="px-8 pt-6 flex items-center gap-4">
-          <img src={product.image} alt={product.name} className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/10" />
+          <img src={product.pic_url} alt={product.name} className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/10" />
           <div>
             <p className="text-white font-semibold">{product.name}</p>
             <p className="text-white/40 text-sm">{product.category}</p>
@@ -170,6 +166,20 @@ function DeleteModal({ product, onConfirm, onClose }) {
 
 /* ── Users Modal ── */
 function UsersModal({ onClose }) {
+const [users,setUsers]=useState([])
+console.log("ok");
+
+useEffect(()=>{
+  fetchUsers().then((resp)=>{
+    console.log(resp,"response");
+setUsers(resp.data)
+
+}).catch((err)=>{
+    console.log(err);
+    
+  })
+},[])
+
   const tierColors = ["#c9a84c", "#94a3b8", "#c4a882", "#94a3b8", "#c9a84c", "#94a3b8"];
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(12px)" }}>
@@ -177,11 +187,11 @@ function UsersModal({ onClose }) {
         <div className="flex items-center justify-between px-8 pt-8 pb-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
           <div>
             <h3 className="text-xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Registered Users</h3>
-            <p className="text-white/40 text-sm mt-0.5">{SEED_USERS.length} members in ShopVera</p>
+            <p className="text-white/40 text-sm mt-0.5">{users.length} members in ShopVera</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="px-3 py-1.5 rounded-full text-xs font-bold" style={{ background: "rgba(201,168,76,0.15)", color: "#c9a84c" }}>
-              {SEED_USERS.length} Total
+              {users.length} Total
             </span>
             <button onClick={onClose} className="w-9 h-9 rounded-xl flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all">
               {Icons.close}
@@ -189,18 +199,20 @@ function UsersModal({ onClose }) {
           </div>
         </div>
         <div className="overflow-y-auto p-6 space-y-3">
-          {SEED_USERS.map((u, i) => (
+          {users.map((u, i) => (
             <div key={u.id} className="flex items-center gap-4 p-4 rounded-2xl transition-all hover:scale-[1.01]" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-              <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-sm font-bold flex-shrink-0"
-                style={{ background: `linear-gradient(135deg, ${tierColors[i]}33, ${tierColors[i]}11)`, color: tierColors[i], border: `1px solid ${tierColors[i]}33` }}>
-                {u.avatar}
-              </div>
+               <img
+                        
+                        src={`${u.profile_image_url}`}
+                        className="w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-bold shrink-0"
+                          style={{ background: "rgba(201,168,76,0.1)", color: "#c9a84c", border: "1px solid rgba(201,168,76,0.15)" }}/>
+                         
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">{u.name}</p>
+                <p className="text-sm font-semibold text-white truncate">{u.username}</p>
                 <p className="text-xs text-white/35 truncate">{u.email}</p>
               </div>
               <div className="hidden sm:flex flex-col items-end">
-                <p className="text-sm font-bold" style={{ color: "#c9a84c" }}>${u.spent.toLocaleString()}</p>
+                <p className="text-sm font-bold" style={{ color: "#c9a84c" }}>${Math.random().toFixed(2)*100}</p>
                 <p className="text-xs text-white/35">{u.orders} orders</p>
               </div>
               <div className="hidden md:flex flex-col items-end">
@@ -218,7 +230,7 @@ function UsersModal({ onClose }) {
 /* ══════ MAIN COMPONENT ══════ */
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const [products, setProducts] = useState(SEED_PRODUCTS);
+  const [products, setProducts] = useState([]);
   const [tab, setTab] = useState("dashboard");
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -226,8 +238,31 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+const [users,setUsers]=useState([])
+console.log("ok");
 
-  useEffect(() => { setTimeout(() => setMounted(true), 50); }, []);
+  useEffect(() => { 
+  
+  fetchProducts().then((resp)=>{
+    console.log(resp,"response");
+    setProducts(resp.data)
+  }).catch((err)=>{
+    console.log(err);
+    
+  })
+  
+
+    fetchUsers().then((resp)=>{
+    console.log(resp,"response");
+setUsers(resp.data)
+
+}).catch((err)=>{
+    console.log(err);
+    
+  })
+  
+    setTimeout(() => setMounted(true), 50); 
+  }, []);
 
   const filtered = products.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -237,16 +272,32 @@ export default function AdminDashboard() {
   const stats = {
     revenue: products.reduce((s, p) => s + p.price * p.sales, 0),
     products: products.length,
-    users: SEED_USERS.length,
+    users: users.length,
     outOfStock: products.filter(p => p.stock === 0).length,
   };
 
   const handleSaveEdit = updated => {
-    setProducts(prev => prev.map(p => p.id === updated.id ? { ...updated, status: getStatus(updated.stock) } : p));
+
+
+    console.log(updated);
+
+
+    updateProduct(updated)
+
+    
+    // setProducts(prev => prev.map(p => p.id === updated.id ? { ...updated, status: getStatus(updated.stock) } : p));
     setEditTarget(null);
   };
 
   const handleDelete = () => {
+
+
+console.log(deleteTarget);
+
+
+deleteProduct(deleteTarget.id)
+
+
     setProducts(prev => prev.filter(p => p.id !== deleteTarget.id));
     setDeleteTarget(null);
   };
@@ -390,7 +441,7 @@ export default function AdminDashboard() {
                 {Icons.users}
                 <span>Users</span>
                 <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "rgba(201,168,76,0.15)", color: "#c9a84c" }}>
-                  {SEED_USERS.length}
+                  {users.length}
                 </span>
               </button>
 
@@ -450,7 +501,7 @@ export default function AdminDashboard() {
                 {Icons.users}
                 <span className="hidden sm:inline">Users</span>
                 <span className="text-xs px-1.5 py-0.5 rounded-lg font-bold" style={{ background: "rgba(201,168,76,0.2)", color: "#c9a84c" }}>
-                  {SEED_USERS.length}
+                  {users.length}
                 </span>
               </button>
               <button onClick={() => navigate("/register")}
@@ -467,7 +518,7 @@ export default function AdminDashboard() {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-                <StatCard label="Total Revenue" value={`$${(stats.revenue / 1000).toFixed(0)}k`} change="+12.4%" delay="0s"
+                <StatCard label="Total Revenue" value={`$${(50000 / 1000).toFixed(0)}k`} change="+12.4%" delay="0s"
                   gradient="linear-gradient(135deg,#1e3a5f 0%,#0f2640 100%)"
                   icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-5 h-5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>} />
                 <StatCard label="Total Products" value={stats.products} change="+2 new" delay="0.06s"
@@ -493,10 +544,10 @@ export default function AdminDashboard() {
                     </button>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
-                    {products.slice(0, 4).map((p, i) => (
+                    {products.map((p, i) => (
                       <div key={p.id} className="product-card glass rounded-2xl p-4 flex gap-4 cursor-default"
                         style={{ animationDelay: `${i * 60}ms` }}>
-                        <img src={p.image} alt={p.name} className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+                        <img src={p.pic_url} alt={p.name} className="w-16 h-16 rounded-xl object-cover shrink-0" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-white truncate mb-0.5">{p.name}</p>
                           <p className="text-xs text-white/40 mb-2">{p.category}</p>
@@ -525,21 +576,23 @@ export default function AdminDashboard() {
                     </button>
                   </div>
                   <div className="glass rounded-2xl overflow-hidden">
-                    {SEED_USERS.sort((a, b) => b.spent - a.spent).slice(0, 5).map((u, i) => (
+                    {users.map((u, i) => (
                       <div key={u.id} className="flex items-center gap-3 px-4 py-3.5 trow"
                         style={{ borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                        <span className="text-xs font-bold w-4 flex-shrink-0" style={{ color: i === 0 ? "#c9a84c" : "rgba(255,255,255,0.2)" }}>
+                        <span className="text-xs font-bold w-4 shrink-0" style={{ color: i === 0 ? "#c9a84c" : "rgba(255,255,255,0.2)" }}>
                           {i + 1}
                         </span>
-                        <div className="w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-bold flex-shrink-0"
-                          style={{ background: "rgba(201,168,76,0.1)", color: "#c9a84c", border: "1px solid rgba(201,168,76,0.15)" }}>
-                          {u.avatar}
-                        </div>
+                        <img
+                        
+                        src={`${u.profile_image_url}`}
+                        className="w-8 h-8 rounded-xl flex items-center justify-center text-[11px] font-bold shrink-0"
+                          style={{ background: "rgba(201,168,76,0.1)", color: "#c9a84c", border: "1px solid rgba(201,168,76,0.15)" }}/>
+                         
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-white truncate">{u.name}</p>
-                          <p className="text-[10px] text-white/30">{u.orders} orders</p>
+                          <p className="text-xs font-semibold text-white truncate">{u.username}</p>
+                          <p className="text-[10px] text-white/30">{u.email} email</p>
                         </div>
-                        <p className="text-xs font-bold flex-shrink-0" style={{ color: "#c9a84c" }}>${u.spent.toLocaleString()}</p>
+                        <p className="text-xs font-bold shrink-0" style={{ color: "#c9a84c" }}>${Math.random().toFixed(2)*100}</p>
                       </div>
                     ))}
                   </div>
@@ -569,7 +622,7 @@ export default function AdminDashboard() {
                     },
                     {
                       title: "View All Users",
-                      desc: `${SEED_USERS.length} registered members`,
+                      desc: `${users.length} registered members`,
                       action: () => setShowUsers(true),
                       gradient: "rgba(255,255,255,0.03)",
                       border: "rgba(255,255,255,0.07)",
@@ -627,7 +680,7 @@ export default function AdminDashboard() {
                     <div className="hidden md:grid items-center px-6 py-4 gap-4"
                       style={{ gridTemplateColumns: "2.5fr 1fr 80px 70px 110px 90px" }}>
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <img src={p.image} alt={p.name} className="w-11 h-11 rounded-xl object-cover flex-shrink-0 ring-1 ring-white/10" />
+                        <img src={p.pic_url} alt={p.name} className="w-11 h-11 rounded-xl object-cover shrink-0 ring-1 ring-white/10" />
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-white truncate">{p.name}</p>
                           <div className="flex items-center gap-1 mt-0.5" style={{ color: "#f59e0b" }}>
@@ -656,9 +709,9 @@ export default function AdminDashboard() {
 
                     {/* Mobile */}
                     <div className="md:hidden flex items-center gap-4 px-4 py-4">
-                      <img src={p.image} alt={p.name} className="w-14 h-14 rounded-xl object-cover flex-shrink-0 ring-1 ring-white/10" />
+                      <img src={p.pic_url} alt={p.username} className="w-14 h-14 rounded-xl object-cover flex-shrink-0 ring-1 ring-white/10" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white truncate">{p.name}</p>
+                        <p className="text-sm font-semibold text-white truncate">{p.user}</p>
                         <p className="text-xs text-white/40 mb-1.5">{p.category} · <span style={{ color: "#c9a84c" }}>${p.price}</span></p>
                         <StatusBadge stock={p.stock} />
                       </div>

@@ -230,11 +230,14 @@ const cart=useSelector((state)=>state)
                     </NavLink>
                     <NavLink
                       to="/"
+                       onClick={()=> setUserMenuOpen(!userMenuOpen)}
                       // onClick={setUserMenuOpen(!userMenuOpen)}
 
                       className="flex items-center space-x-3 px-5 py-3 text-sm font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 transition-all duration-200"
                     >
-                      <LogOut className="w-4 h-4" />
+                      <LogOut className="w-4 h-4" 
+                       
+                         />
                       <span>Logout</span>
                     </NavLink>
                   </div>
