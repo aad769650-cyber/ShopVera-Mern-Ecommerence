@@ -172,7 +172,7 @@ console.log("ok");
 useEffect(()=>{
   fetchUsers().then((resp)=>{
     console.log(resp,"response");
-setUsers(resp.data)
+setUsers(resp)
 
 }).catch((err)=>{
     console.log(err);
@@ -255,6 +255,13 @@ fetchProducts()
 fetchUsers()
   .then((data) => {
     console.log(data, "users response");
+
+if(!data){
+  setUsers([]);
+  return
+}
+
+
     setUsers(data); // use data directly
   })
   .catch((err) => {
