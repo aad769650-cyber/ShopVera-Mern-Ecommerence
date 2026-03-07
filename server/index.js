@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const { pool } = require("./db/db");
 const nodemailer = require("nodemailer");
 const path = require("path");
+const { userRouter } = require("./routes/userRoute");
 require("dotenv").config();
 
 const app = express();
@@ -68,7 +69,7 @@ app.get("/detail/:id/:category", async (req, res) => {
 });
 
 // User routes
-app.use("/user", require("./routes/userRoute").userRouter);
+app.use("/user",userRouter);
 
 // ------------------------
 // Nodemailer
