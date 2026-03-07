@@ -243,23 +243,23 @@ console.log("ok");
 
   useEffect(() => { 
   
-  fetchProducts().then((resp)=>{
-    console.log(resp,"response");
-    setProducts(resp.data)
-  }).catch((err)=>{
-    console.log(err);
-    
+fetchProducts()
+  .then((data) => {
+    console.log(data, "products response");
+    setProducts(data); // just use data directly
   })
-  
-
-    fetchUsers().then((resp)=>{
-    console.log(resp,"response");
-setUsers(resp.data)
-
-}).catch((err)=>{
+  .catch((err) => {
     console.log(err);
-    
+  });
+
+fetchUsers()
+  .then((data) => {
+    console.log(data, "users response");
+    setUsers(data); // use data directly
   })
+  .catch((err) => {
+    console.log(err);
+  });
   
     setTimeout(() => setMounted(true), 50); 
   }, []);
