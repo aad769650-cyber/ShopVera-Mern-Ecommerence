@@ -14,24 +14,19 @@ app.use(cookieParser());
 app.use("/uploads",express.static("./uploads"))
 
 const allowedOrigins = [
-  "http://localhost:5173",  // Vite
-  "https://shopvera-mern-ecommerence.onrender.com" // production
+  "https://shopvera-mern-ecommerence.onrender.com", // frontend deployed URL
+  "http://localhost:5173",  // dev
 ];
 
-app.use(cors(
-    {
-         origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // allow Postman or server-to-server requests
+    if (allowedOrigins.includes(origin)) return callback(null, true); // allow frontend
+    return callback(new Error("CORS not allowed"));
   },
-        methods:["GET","POST","PATCH","DELETE"],
-          credentials: true,    
-    }
-))
-
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  credentials: true // required for cookies/auth
+}));
 
 app.use(express.json())
 
@@ -46,7 +41,11 @@ console.log("received");
 
    return  res.status(200).send(data)
    } catch (error) {
-    return res.status(404).send({Error:"Something is going wrong"})
+            console.error("🔥 Query exploded:", error.message);
+        return res.status(400).json({ 
+            msg: "Database rejected the request", 
+            error: error.message 
+        });
    }
     
 })
