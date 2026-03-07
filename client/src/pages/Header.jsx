@@ -315,33 +315,33 @@ const cart=useSelector((state)=>state)
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href="/login"
+                  <NavLink
+                    to="/login"
                     className="px-4 py-2 text-xs font-bold text-slate-900 bg-white rounded-lg hover:bg-slate-200 transition-all duration-300 text-center"
                   >
                     Login
-                  </a>
-                  <a
-                    href="/signup"
+                  </NavLink>
+                  <NavLink
+                    to="/signup"
                     className="px-4 py-2 text-xs font-bold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-all duration-300 text-center"
                   >
                     Register
-                  </a>
+                  </NavLink>
                 </div>
               </div>
 
               {/* Navigation Links */}
               <nav className="space-y-1 mb-6">
                 {navLinks.map((link, index) => (
-                  <a
+                  <NavLink
                     key={link.name}
-                    href={link.href}
+                    to={link.href}
                     className="block px-4 py-3 text-base font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all duration-300"
                     style={{ animationDelay: `${index * 50}ms` }}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.name}
-                  </a>
+                  </NavLink>
                 ))}
               </nav>
 
@@ -371,20 +371,20 @@ const cart=useSelector((state)=>state)
                   Account
                 </h3>
                 <div className="space-y-1">
-                  <a
-                    href="#orders"
+                  <NavLink
+                    to="/cart"
                     className="flex items-center space-x-3 px-4 py-3 text-base font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all duration-300"
                   >
                     <Package className="w-5 h-5" />
                     <span>My Orders</span>
-                  </a>
-                  <a
-                    href="#logout"
+                  </NavLink>
+                  <NavLink
+                 to={"/"}
                     className="flex items-center space-x-3 px-4 py-3 text-base font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-all duration-300"
                   >
                     <LogOut className="w-5 h-5" />
                     <span>Logout</span>
-                  </a>
+                  </NavLink>
                 </div>
               </div>
             </div>
