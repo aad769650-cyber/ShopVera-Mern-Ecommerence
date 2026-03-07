@@ -55,21 +55,21 @@ const refreshToken=generateRefreshToken(req.body);
 console.log("token",refreshToken);
 
 res.cookie("accessToken",accessToken
-    // ,{ 
-    // httpOnly: true,
-    // secure: true,
-    // sameSite: "none",
+    ,{ 
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
 
 
-// }
+}
 )
 res.cookie("Refresh",refreshToken,
-// {  
-    //    httpOnly: true,
-    // secure: true,
-    // sameSite: "none"
+{  
+       httpOnly: true,
+    secure: true,
+    sameSite: "none"
 
-// }
+}
 )
 
 
@@ -121,21 +121,21 @@ const refreshToken=generateRefreshToken(req.body);
 console.log("token",refreshToken);
 
 res.cookie("accessToken",accessToken
-    // ,{ 
-    // httpOnly: true,
-    // secure: true,
-    // sameSite: "none",
+    ,{ 
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
 
 
-// }
+}
 )
 res.cookie("Refresh",refreshToken,
-// {  
-    //    httpOnly: true,
-    // secure: true,
-    // sameSite: "none"
+{  
+       httpOnly: true,
+    secure: true,
+    sameSite: "none"
 
-// }
+}
 )
 
 
