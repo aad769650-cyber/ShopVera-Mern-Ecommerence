@@ -313,6 +313,8 @@ export default function Register() {
       title: "Product Registered!",
       message: `"${payload.name}" has been added. Redirecting to admin...`,
     });
+
+    handleReset()
   };
 
   const handleReset = () => {
