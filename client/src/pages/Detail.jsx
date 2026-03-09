@@ -74,7 +74,7 @@ const dispatch=useDispatch()
   useEffect(()=>{
 const data=fetchDetail(params).then((res)=>{
 console.log(res);
-setProduct(res[0])
+setProduct(res)
 });
 // console.log("detail",data);
 
