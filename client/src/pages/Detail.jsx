@@ -127,7 +127,7 @@ if (exists) {
 
 
 
-console.log(product);
+console.log("products",product);
 
 
 
