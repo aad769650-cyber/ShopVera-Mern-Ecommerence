@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 
 export const api = axios.create({
-  baseURL: "https://shopvera-mern-ecommerence-backend.onrender.com",
-  withCredentials: true, // automatically send cookies for all requests
+  // baseURL: "https://shopvera-mern-ecommerence-backend.onrender.com",
+  baseURL:"http://localhost:8000",
+  // withCredentials: true, // automatically send cookies for all requests
 });
 
 

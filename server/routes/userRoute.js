@@ -161,7 +161,7 @@ try {
 
     const [rows]=await pool.query(`select * from products` )
    
-//    console.log("pass 1");
+   console.log("pass 1",rows);
 
 
  

@@ -27,10 +27,7 @@ const App = () => {
       element:<Home></Home>
     },
   
-  {
-    path:"/shop",
-    element:<Shop></Shop>
-  },
+
   {
     path:"/cart",
     element:<Cart></Cart>

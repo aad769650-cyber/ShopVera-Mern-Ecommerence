@@ -108,6 +108,25 @@ Number of Guests: ${guests}
   }
 });
 
+
+
+
+
+async function checkConnection() {
+  try {
+
+// const [tables] = await pool.query("Select * from products");
+// console.log(tables);
+    const connection = await pool.getConnection();
+    console.log("✅ Database connected successfully!");
+    connection.release();
+  } catch (err) {
+    console.error("❌ Database connection failed:", err.message);
+  }
+}
+
+checkConnection();
+
 // ------------------------
 // Listen
 // ------------------------

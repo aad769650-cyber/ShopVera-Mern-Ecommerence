@@ -23,6 +23,8 @@ const res=api.get("/data").then((res)=>{
   setProducts(res?.data)
   return res
 }).catch((err)=>{
+  console.log(err);
+  
   return err
 })
 console.log(res);

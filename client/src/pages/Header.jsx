@@ -48,7 +48,7 @@ const cart=useSelector((state)=>state)
 
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Shop', href: '/shop' },
+    { name: 'Shop', href: '/' },
 
     { name: 'About', href: '/about' },
     { name: 'Admin', href: '/admin' },
